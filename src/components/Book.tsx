@@ -2,9 +2,11 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { BookProps } from "../Types/BookType";
 import { useState } from "react";
 import { BookInfo } from "./BookInfo";
+import { BookUpdate } from "./BookUpdate";
 
 export default function Book({ book }: BookProps) {
 	const [modalVisible, setModalVisible] = useState(false);
+	const [updateVisible, setUpdateVisible] = useState(false);
 
 	return (
 		<>
@@ -15,7 +17,12 @@ export default function Book({ book }: BookProps) {
 				style={styles.book}
 			>
 				<Text style={styles.displayTitle}>{book.title}</Text>
-				<Pressable style={styles.editbtn}>
+				<Pressable
+					onPress={() => {
+						setUpdateVisible(true);
+					}}
+					style={styles.editbtn}
+				>
 					<Text style={styles.editTxt}>Update</Text>
 				</Pressable>
 			</Pressable>
@@ -23,6 +30,11 @@ export default function Book({ book }: BookProps) {
 				book={book}
 				visible={modalVisible}
 				setvisible={setModalVisible}
+			/>
+			<BookUpdate
+				book={book}
+				visible={updateVisible}
+				setvisible={setUpdateVisible}
 			/>
 		</>
 	);

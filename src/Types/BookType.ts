@@ -7,6 +7,11 @@ export interface BookButtonProps{
 	book: BookType;
 	setvisible: (visible: boolean) => void;
 }
+export interface BookUpdateProps {
+	book: BookType;
+	visible: boolean;
+	setvisible: (visible: boolean) => void;
+}
 export interface BookType {
 		title: string;
 		pageSaved: number;
