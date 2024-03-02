@@ -26,3 +26,8 @@ export interface BookProps {
 	book: BookType;
 	setBooks: (books: BookType[]) => void;
 }
+
+export interface BookCreateProps {
+	visible: boolean;
+	setvisible: (visible: boolean) => void;
+}

@@ -63,7 +63,7 @@ export const BookUpdate = ({
 						<View style={styles.info}>
 							<View style={styles.infoCont}>
 								<View style={styles.infoLabel}>
-									<Text>Last page</Text>
+									<Text>Current page</Text>
 								</View>
 								<TextInput
 									keyboardType="numeric"

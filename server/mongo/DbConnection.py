@@ -4,18 +4,19 @@ import time
 from mongo.MongoInstance import MongoInstance
 
 load_dotenv()
-user = os.getenv('user')
-authToken = os.getenv('pass')
+user = os.getenv("user")
+authToken = os.getenv("pass")
 
 if authToken is None:
-    raise ValueError('Please set the MONGO_PASS environment variable')
+    raise ValueError("Please set the MONGO_PASS environment variable")
 
 uri = f"mongodb+srv://{user}:{authToken}@clusterinit1.xskf2ay.mongodb.net/?retryWrites=true&w=majority&appName=ClusterInit1"
+
 
 def connectToDb():
     # Send a ping to confirm a successful connection
     try:
-        
+
         start = time.perf_counter()
 
         mongoInstance = MongoInstance(uri)

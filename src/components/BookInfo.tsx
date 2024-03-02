@@ -15,7 +15,7 @@ export const BookInfo = ({ book, visible, setvisible }: BookInfoProps) => {
 						<View style={styles.info}>
 							<View style={styles.infoCont}>
 								<View style={styles.infoLabel}>
-									<Text>Last page</Text>
+									<Text>Current page</Text>
 								</View>
 								<Text style={styles.infoText}>
 									{book.pageSaved}
