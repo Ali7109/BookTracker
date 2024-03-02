@@ -10,6 +10,8 @@ export interface BookButtonProps{
 export interface BookUpdateProps {
 	book: BookType;
 	visible: boolean;
+	books: BookType[];
+	setBooks: (books: BookType[]) => void;
 	setvisible: (visible: boolean) => void;
 }
 export interface BookType {
@@ -20,5 +22,7 @@ export interface BookType {
 }
 
 export interface BookProps {
+	books: BookType[];
 	book: BookType;
+	setBooks: (books: BookType[]) => void;
 }

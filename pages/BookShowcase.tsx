@@ -1,28 +1,10 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Book from "../src/components/Book";
-import React from "react";
+import React, { useState } from "react";
+import { BOOKS_MOCK } from "../src/mockData/booksData";
 
 export default function BookShowcase() {
-	const books = [
-		{
-			title: "The Great Gatsby",
-			pageSaved: 45,
-			totalPages: 180,
-			lastOpened: "2024-02-28",
-		},
-		{
-			title: "The Catcher in the Rye",
-			pageSaved: 100,
-			totalPages: 200,
-			lastOpened: "2024-02-28",
-		},
-		{
-			title: "To Kill a Mockingbird",
-			pageSaved: 200,
-			totalPages: 300,
-			lastOpened: "2024-02-28",
-		},
-	];
+	const [books, setBooks] = useState(BOOKS_MOCK);
 
 	return (
 		<View style={styles.container}>
@@ -33,7 +15,11 @@ export default function BookShowcase() {
 				>
 					{books.map((book, index) => (
 						<React.Fragment key={index}>
-							<Book book={book} />
+							<Book
+								books={books}
+								setBooks={setBooks}
+								book={book}
+							/>
 						</React.Fragment>
 					))}
 				</ScrollView>
