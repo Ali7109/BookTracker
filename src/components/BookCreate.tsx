@@ -9,10 +9,17 @@ import {
 	TextInput,
 	Keyboard,
 	TouchableWithoutFeedback,
+	KeyboardAvoidingView,
+	Platform,
 } from "react-native";
 import { BookCreateProps } from "../Types/BookType";
 
-export const BookCreate = ({ visible, setvisible }: BookCreateProps) => {
+export const BookCreate = ({
+	refresh,
+	setRefresh,
+	visible,
+	setvisible,
+}: BookCreateProps) => {
 	const [title, setTitle] = useState<string>("");
 	const [startPage, setStartPage] = useState<number>(0);
 	const [totalPages, setTotalPages] = useState<number>(0);
@@ -48,23 +55,57 @@ export const BookCreate = ({ visible, setvisible }: BookCreateProps) => {
 		}
 	};
 
-	const handleSave = () => {
-		if (title === "" || startPage === 0 || totalPages === 0) {
-			Alert.alert("Please fill all the fields");
-			return;
-		} else {
-			if (totalPages < startPage) {
-				Alert.alert("The current page is larger than the book pages.");
-				setStartPage(totalPages);
-				return;
-			}
-			const newBook = {
+	const createBook = async () => {
+		try {
+			const url = "http://10.45.9.133:8000/api/create";
+			const body = JSON.stringify({
 				title: title,
-				pageSaved: startPage,
-				totalPages: totalPages,
-			};
+				page_saved: startPage,
+				total_pages: totalPages,
+			});
+
+			const res = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: body,
+			});
+
+			if (res.ok) {
+				console.log("Book created successfully");
+			} else {
+				console.error("Error creating book", res.statusText);
+			}
+		} catch (error: any) {
+			console.error("Error creating book:", error.message);
 		}
-		setvisible(false);
+	};
+
+	const handleSave = () => {
+		try {
+			if (title === "" || totalPages === 0) {
+				Alert.alert("Please fill all the fields");
+				return;
+			} else {
+				if (totalPages < startPage) {
+					Alert.alert(
+						"The current page is larger than the book pages."
+					);
+					setStartPage(totalPages);
+					return;
+				}
+			}
+			createBook().then(() => {
+				setRefresh(!refresh);
+				setvisible(false);
+				setTitle("");
+				setStartPage(0);
+				setTotalPages(0);
+			});
+		} catch (error: any) {
+			console.error("Error creating book", error.message);
+		}
 	};
 
 	return (
@@ -79,67 +120,80 @@ export const BookCreate = ({ visible, setvisible }: BookCreateProps) => {
 				accessible={false}
 			>
 				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<Pressable
-							style={styles.close}
-							onPress={() => handleClose()}
-						>
-							<Text style={styles.cross}>x</Text>
-						</Pressable>
-						<View style={styles.header}>
-							<Text style={styles.adding}>Adding book</Text>
-						</View>
-						<View style={styles.info}>
-							<View style={styles.titleCont}>
-								<View style={styles.title}>
-									<Text style={styles.inputTitle}>Title</Text>
-								</View>
-								<TextInput
-									placeholder="Enter title"
-									style={styles.textInput}
-									onChangeText={(text) => setTitle(text)}
-									value={title}
-									placeholderTextColor={"white"}
-								/>
+					<KeyboardAvoidingView
+						style={styles.avoidingView}
+						behavior={Platform.OS == "ios" ? "padding" : "height"}
+					>
+						<View style={styles.modalView}>
+							<Pressable
+								style={styles.close}
+								onPress={() => handleClose()}
+							>
+								<Text style={styles.cross}>x</Text>
+							</Pressable>
+							<View style={styles.header}>
+								<Text style={styles.adding}>Adding book</Text>
 							</View>
+							<View style={styles.info}>
+								<View style={styles.titleCont}>
+									<View style={styles.title}>
+										<Text style={styles.inputTitle}>
+											Title
+										</Text>
+									</View>
+									<TextInput
+										placeholder="Enter title"
+										style={styles.textInput}
+										onChangeText={(text) => setTitle(text)}
+										value={title}
+										placeholderTextColor={"white"}
+									/>
+								</View>
 
-							<View style={styles.infoCont}>
-								<View style={styles.infoLabel}>
-									<Text style={styles.inputTitle}>
-										Current Page
-									</Text>
+								<View style={styles.infoCont}>
+									<View style={styles.infoLabel}>
+										<Text style={styles.inputTitle}>
+											Current Page
+										</Text>
+									</View>
+									<TextInput
+										keyboardType="numeric"
+										onChangeText={(text) =>
+											handleInputChange(
+												text,
+												setStartPage
+											)
+										}
+										style={styles.numInput}
+										value={startPage.toString()}
+										placeholderTextColor={"white"}
+									/>
 								</View>
-								<TextInput
-									keyboardType="numeric"
-									onChangeText={(text) =>
-										handleInputChange(text, setStartPage)
-									}
-									style={styles.numInput}
-									value={startPage.toString()}
-									placeholderTextColor={"white"}
-								/>
-							</View>
-							<View style={styles.infoCont}>
-								<View style={styles.infoLabel}>
-									<Text style={styles.inputTitle}>
-										Total Pages
-									</Text>
+								<View style={styles.infoCont}>
+									<View style={styles.infoLabel}>
+										<Text style={styles.inputTitle}>
+											Total Pages
+										</Text>
+									</View>
+									<TextInput
+										keyboardType="numeric"
+										onChangeText={(text) =>
+											handleInputChange(
+												text,
+												setTotalPages
+											)
+										}
+										style={styles.numInput}
+										value={totalPages.toString()}
+										placeholderTextColor={"white"}
+									/>
 								</View>
-								<TextInput
-									keyboardType="numeric"
-									onChangeText={(text) =>
-										handleInputChange(text, setTotalPages)
-									}
-									style={styles.numInput}
-									value={totalPages.toString()}
-									placeholderTextColor={"white"}
-								/>
 							</View>
+							<Pressable style={styles.save} onPress={handleSave}>
+								<Text style={styles.saveText}>Save</Text>
+							</Pressable>
 						</View>
-						<Pressable style={styles.save} onPress={handleSave}>
-							<Text style={styles.saveText}>Save</Text>
-						</Pressable>
-					</View>
+					</KeyboardAvoidingView>
 				</View>
 			</TouchableWithoutFeedback>
 		</Modal>

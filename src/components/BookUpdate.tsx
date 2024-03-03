@@ -9,13 +9,12 @@ import {
 	TextInput,
 } from "react-native";
 import { BookUpdateProps } from "../Types/BookType";
-import { Picker } from "@react-native-picker/picker";
 
 export const BookUpdate = ({
 	book,
-	books,
+	refresh,
+	setRefresh,
 	visible,
-	setBooks,
 	setvisible,
 }: BookUpdateProps) => {
 	const [updatePage, setUpdatePage] = useState<number>(book.pageSaved);
@@ -37,12 +36,67 @@ export const BookUpdate = ({
 		}
 	};
 
+	const updateBook = async () => {
+		try {
+			const url = "http://10.45.9.133:8000/api/update";
+			const body = JSON.stringify({
+				title: book.title,
+				page_saved: updatePage,
+			});
+
+			const res = await fetch(url, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: body,
+			});
+
+			if (res.ok) {
+				console.log("Book updated successfully");
+			} else {
+				console.error("Error updating book", res.statusText);
+			}
+		} catch (error: any) {
+			console.error("Error updating book:", error.message);
+		}
+	};
+
 	const handleSave = () => {
-		const newBooks = [...books];
-		const index = newBooks.findIndex((b) => b.title === book.title);
-		newBooks[index].pageSaved = updatePage;
-		setBooks(newBooks);
-		setvisible(false);
+		try {
+			if (updatePage !== book.pageSaved) {
+				if (updatePage > book.totalPages) {
+					Alert.alert("Your book doesn't have that many pages.");
+					return;
+				} else if (updatePage < 0) {
+					Alert.alert("Enter a valid input.");
+					return;
+				} else {
+					updateBook().then(() => {
+						setvisible(false);
+						setRefresh(!refresh);
+					});
+					return;
+				}
+			}
+			setvisible(false);
+		} catch (error: any) {
+			Alert.alert("Save error");
+		}
+	};
+
+	const handleInputChange = (text: string, stateChange: any) => {
+		const number = parseInt(text);
+		if (text == "") return;
+		// Check if the number is within the range
+		if (!isNaN(number) && number >= 0 && number <= book.totalPages) {
+			stateChange(number);
+		} else {
+			if (number > book.totalPages) {
+				Alert.alert("Your book doesn't have that many pages.");
+			}
+			stateChange(0);
+		}
 	};
 
 	return (
@@ -67,26 +121,9 @@ export const BookUpdate = ({
 								</View>
 								<TextInput
 									keyboardType="numeric"
-									onChangeText={(text) => {
-										// Convert text to number
-										const number = parseInt(text);
-										if (text == "") return;
-										// Check if the number is within the range
-										if (
-											!isNaN(number) &&
-											number >= 0 &&
-											number <= book.totalPages
-										) {
-											setUpdatePage(number); // Update state
-										} else {
-											if (number > book.totalPages) {
-												Alert.alert(
-													"Your book doesn't have that many pages."
-												);
-											}
-											setUpdatePage(0); // Reset state
-										}
-									}}
+									onChangeText={(text) =>
+										handleInputChange(text, setUpdatePage)
+									}
 									style={styles.pageUpdate}
 									value={updatePage.toString()}
 									placeholderTextColor={"white"}

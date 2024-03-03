@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BookInfo } from "./BookInfo";
 import { BookUpdate } from "./BookUpdate";
 
-export default function Book({ books, setBooks, book }: BookProps) {
+export default function Book({ refresh, setRefresh, book }: BookProps) {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [updateVisible, setUpdateVisible] = useState(false);
 
@@ -33,8 +33,8 @@ export default function Book({ books, setBooks, book }: BookProps) {
 			/>
 			<BookUpdate
 				book={book}
-				setBooks={setBooks}
-				books={books}
+				refresh={refresh}
+				setRefresh={setRefresh}
 				visible={updateVisible}
 				setvisible={setUpdateVisible}
 			/>

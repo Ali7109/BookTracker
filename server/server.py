@@ -38,7 +38,7 @@ def create():
             }
         )
         if query_res.acknowledged:
-            return "Document created", 201
+            return "Document created", 200
         else:
             return "Document not found", 404
 
@@ -68,7 +68,7 @@ def update():
             {"$set": {"pageSaved": page_saved, "lastOpened": datetime.now()}},
         )
         if query_res.modified_count > 0:
-            return "Document updated"
+            return "Document updated", 200
         else:
             return "Document not found", 404
     else:
@@ -89,7 +89,7 @@ def delete():
     if res:
         query_res = db.delete_one({"title": title})
         if query_res.deleted_count > 0:
-            return "Document deleted"
+            return "Document deleted", 200
         else:
             return "Document not found", 404
     else:
@@ -112,10 +112,10 @@ def fetchAll():
             )
         )
 
-        return items
+        return items, 200
     else:
         return "Failed to create document"
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=8000)

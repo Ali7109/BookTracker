@@ -1,3 +1,10 @@
+export interface BookType {
+	title: string;
+	pageSaved: number;
+	lastOpened: string;
+	totalPages: number,
+}
+
 export interface BookInfoProps {
 	book: BookType;
 	visible: boolean;
@@ -10,24 +17,20 @@ export interface BookButtonProps{
 export interface BookUpdateProps {
 	book: BookType;
 	visible: boolean;
-	books: BookType[];
-	setBooks: (books: BookType[]) => void;
+	refresh: boolean;
 	setvisible: (visible: boolean) => void;
-}
-export interface BookType {
-		title: string;
-		pageSaved: number;
-		lastOpened: string;
-		totalPages: number,
+	setRefresh: (refresh: boolean) => void;
 }
 
 export interface BookProps {
-	books: BookType[];
 	book: BookType;
-	setBooks: (books: BookType[]) => void;
+	refresh: boolean;
+	setRefresh: (refresh: boolean) => void;
 }
 
 export interface BookCreateProps {
 	visible: boolean;
+	refresh: boolean;
+	setRefresh: (refresh: boolean) => void;
 	setvisible: (visible: boolean) => void;
 }
