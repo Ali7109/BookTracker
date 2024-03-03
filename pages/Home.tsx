@@ -1,10 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import { Button, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Home({ navigation }: any) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.home}>
+				<Image
+					source={require("../assets/theKeeper.jpeg")}
+					style={styles.logo}
+				/>
+				<View style={styles.appTitle}>
+					<Text style={styles.titleText}>QuillQuest</Text>
+				</View>
 				<Pressable
 					style={styles.showcaseButton}
 					onPress={() =>
@@ -20,6 +27,23 @@ export default function Home({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
+	appTitle: {
+		fontSize: 30,
+		margin: 20,
+	},
+	titleText: {
+		fontSize: 30,
+		fontWeight: "bold",
+		color: "black",
+	},
+	logo: {
+		width: 200,
+		height: 200,
+		borderRadius: 100,
+		shadowColor: "black",
+		shadowOffset: { width: 0, height: 5 },
+		shadowOpacity: 0.3,
+	},
 	container: {
 		flex: 1,
 		backgroundColor: "black",
