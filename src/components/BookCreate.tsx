@@ -23,13 +23,28 @@ export const BookCreate = ({
 	const [title, setTitle] = useState<string>("");
 	const [startPage, setStartPage] = useState<number>(0);
 	const [totalPages, setTotalPages] = useState<number>(0);
+	const [keyboardOffset, setKeyboardOffset] = useState<number>(0);
+
+	useEffect(() => {
+		let kh = Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+		return () => {
+			kh.remove();
+		};
+	}, []);
+
+	const _keyboardDidHide = () => {
+		setKeyboardOffset(0);
+	};
 
 	const handleClose = () => {
 		if (title !== "" || startPage !== 0 || totalPages !== 0) {
 			Alert.alert("Closing without save", " Your change wont be saved!", [
 				{
 					text: "OK",
-					onPress: () => setvisible(false),
+					onPress: () => {
+						resetInputs();
+						setvisible(false);
+					},
 				},
 				{
 					text: "Cancel",
@@ -38,6 +53,7 @@ export const BookCreate = ({
 			]);
 			return;
 		}
+		resetInputs();
 		setvisible(false);
 	};
 
@@ -99,13 +115,17 @@ export const BookCreate = ({
 			createBook().then(() => {
 				setRefresh(!refresh);
 				setvisible(false);
-				setTitle("");
-				setStartPage(0);
-				setTotalPages(0);
+				resetInputs();
 			});
 		} catch (error: any) {
 			console.error("Error creating book", error.message);
 		}
+	};
+
+	const resetInputs = () => {
+		setTitle("");
+		setStartPage(0);
+		setTotalPages(0);
 	};
 
 	return (
@@ -122,6 +142,8 @@ export const BookCreate = ({
 				<View style={styles.centeredView}>
 					<KeyboardAvoidingView
 						behavior={Platform.OS == "ios" ? "padding" : "height"}
+						style={styles.avoidance}
+						keyboardVerticalOffset={keyboardOffset}
 					>
 						<View style={styles.modalView}>
 							<Pressable
@@ -319,6 +341,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		fontSize: 18,
 	},
+	avoidance: {},
 	modalView: {
 		opacity: 1,
 		backgroundColor: "black",
