@@ -121,7 +121,6 @@ export const BookCreate = ({
 			>
 				<View style={styles.centeredView}>
 					<KeyboardAvoidingView
-						style={styles.avoidingView}
 						behavior={Platform.OS == "ios" ? "padding" : "height"}
 					>
 						<View style={styles.modalView}>
@@ -262,15 +261,15 @@ const styles = StyleSheet.create({
 	},
 	close: {
 		position: "absolute",
-		top: 0,
-		right: 0,
-		backgroundColor: "black",
-		borderRadius: 90,
-		padding: 10,
+		top: -15,
+		right: -15,
+		backgroundColor: "white",
+		borderRadius: 20,
+		paddingHorizontal: 10,
 	},
 	cross: {
-		color: "rgba(255, 255, 255, 0.5)",
 		fontSize: 30,
+		color: "black",
 		fontWeight: "bold",
 		borderRadius: 10,
 		padding: 10,
@@ -327,7 +326,6 @@ const styles = StyleSheet.create({
 		padding: 20,
 		paddingHorizontal: 20,
 		height: 720,
-		width: "80%",
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-around",
