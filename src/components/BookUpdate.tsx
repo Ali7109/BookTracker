@@ -38,7 +38,7 @@ export const BookUpdate = ({
 
 	const updateBook = async () => {
 		try {
-			const url = "http://10.45.9.133:8000/api/update";
+			const url = "http/api/update";
 			const body = JSON.stringify({
 				title: book.title,
 				page_saved: updatePage,
