@@ -73,7 +73,7 @@ export const BookCreate = ({
 
 	const createBook = async () => {
 		try {
-			const url = "http://10.45.9.133:8000/api/create";
+			const url = `${process.env.url}/api/create`;
 			const body = JSON.stringify({
 				title: title,
 				page_saved: startPage,
