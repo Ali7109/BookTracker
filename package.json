@@ -15,7 +15,7 @@
     "dotenv": "^16.4.5",
     "expo": "^49.0.23",
     "expo-status-bar": "~1.6.0",
-    "native-base": "^2.15.2",
+    "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.84.1",
     "react-native-input-spinner": "^1.8.1",
